@@ -1,0 +1,70 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include "treeset.h"
+
+// just return a null root at this point
+TreeSet TREESET_new() {
+    return (TreeSet) { .root = NULL };
+}
+
+
+// helper recursive
+// TODO maybe use pointer to pointer for shorter code
+void inner_add(TreeSetNode* root, TreeSetNode* new_node) {
+
+    int new_value = new_node->value;
+
+    // set is a unique value container, do nothing if it presents.
+    if (new_value == root->value) {
+        printf("oops, same value\n");
+
+        free(new_node); // nothing will be added, the new node wont be used
+    }
+
+    // if bigger than root then go left
+    else if (new_value > root->value) {
+        if (root->left == NULL) {
+            printf("adding new node on the left\n");
+            root->left = new_node;
+
+        } else {
+
+            // go recursively
+            printf("going left\n");
+            inner_add(root->left, new_node);
+        }
+    }
+
+    // if smaller than root then go right
+    else if (new_value < root->value) {
+        if (root->right == NULL) {
+            printf("adding new node on the right\n");
+            root->right = new_node;
+
+        } else {
+
+            // go recursively
+            printf("going right\n");
+            inner_add(root->right, new_node);
+        }
+    }
+}
+
+// part of api, uses inner recursive method
+void TREESET_add(TreeSet *treeset, int new_value) {
+
+    // initialize new node
+    TreeSetNode* nd = malloc(sizeof(TreeSetNode));
+    nd->value = new_value;
+    nd->right = NULL;
+    nd->left = NULL;
+
+    // if empty insert manually
+    if (treeset->root == NULL) {
+        printf("empty set, add root\n");
+        treeset->root = nd;
+
+    } else {
+        inner_add(treeset->root, nd);
+    }
+}
