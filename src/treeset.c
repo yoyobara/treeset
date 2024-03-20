@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include "treeset.h"
 
-// just return a null root at this point
+// API just return a null root at this point
 TreeSet TREESET_new() {
     return (TreeSet) { .root = NULL };
 }
@@ -50,7 +50,7 @@ void inner_add(TreeSetNode* root, TreeSetNode* new_node) {
     }
 }
 
-// part of api, uses inner recursive method
+// API, uses inner recursive method
 void TREESET_add(TreeSet *treeset, int new_value) {
 
     // initialize new node
@@ -68,3 +68,27 @@ void TREESET_add(TreeSet *treeset, int new_value) {
         inner_add(treeset->root, nd);
     }
 }
+
+// helper recursive
+bool inner_contains(TreeSetNode* root, int value) {
+    if (root == NULL) {
+        printf("null node\n");
+        return false;
+    }
+
+    else if (value > root->value) {
+        return inner_contains(root->left, value);
+    }
+    else if (value < root->value) {
+        return inner_contains(root->right, value);
+    }
+
+    // must equal
+    return true;
+}
+
+// API
+bool TREESET_contains(TreeSet* treeset, int value) {
+    return inner_contains(treeset->root, value);
+}
+
