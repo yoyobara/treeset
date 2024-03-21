@@ -77,13 +77,16 @@ bool inner_contains(TreeSetNode* root, int value) {
     }
 
     else if (value > root->value) {
+        printf("going left\n");
         return inner_contains(root->left, value);
     }
     else if (value < root->value) {
+        printf("going right\n");
         return inner_contains(root->right, value);
     }
 
     // must equal
+    printf("equals\n");
     return true;
 }
 
